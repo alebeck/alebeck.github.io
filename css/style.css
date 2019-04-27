@@ -1,4 +1,4 @@
-header { height: 60px; }
+header { height: 20px; }
 
 .main-content { max-width: 1010px; }
 
@@ -31,82 +31,135 @@ header { height: 60px; }
 .purple-700 { background-color: #4c2889; }
 .black { background-color: #1b1f23; }
 
-.left-column { max-width: 253px; }
+.left-column { max-width: 380px; }
 .summary-name {
-    font-size: 26px;
-    line-height: 30px;
+  font-size: 26px;
+  line-height: 30px;
 }
 .summary-subtitle { line-height: 24px; }
-.summary-button { width: 229px; }
-.summary-toolkit { height: 35px; }
-.summary-course {
-    height: 35px;
-    border-radius: 15px;
+.summary-toolkit {
+  height: 35px;
+  display: inline-block;
 }
 
 .pinned-list { flex-direction: column; }
 .pinned-item { flex: 48%; }
 .language-indicator {
-    top: 1px;
-    width: 12px;
-    height: 12px;
-    border-radius: 50%;
+  top: 1px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
 }
 
-.timeline-stretch {
-    flex-basis: auto;
-    flex-grow: 2;
-}
-.timeline-horizontal { height: 1px; }
-.timeline-line-top {
-    height: 13px;
-    width: 2px;
-}
-.timeline-circle-marker {
-    height: 32px !important;
-    width: 32px !important;
-    border-radius: 100px;
-}
-.timeline-line-bottom { width: 2px; }
-.timeline-card { flex-direction: column; }
-.timeline-card-commits {
-    top: 1px;
-    display: inline-block;
-    width: 8px;
-    height: 8px;
-    border-radius: 2%;
-    margin-left: -3px;
-}
-.timeline-card-text { margin-left: 0px; }
-.timeline-card-info { flex-direction: column; }
-.timeline-card-octicon { margin-bottom: 16px; }
 .container { display: none; }
-.events-explainer { display: flex; }
 
-.calendar-heatmap {
-    box-sizing: initial;
-    display: flex;
-    flex-shrink: auto;
-    margin-left: 35px;
-  }
+.dummy-tile { display: none !important }
 
-/* Media Queries */
+.avatar { transform: scale(0.9); }
+
 @media (min-width: 600px) {
-    .column-container { flex-wrap: nowrap !important; }
-    .timeline-card { flex-direction: row; }
-    .timeline-card-text { margin-left: 24px; }
-    .timeline-card-info { flex-direction: row; }
-    .timeline-card-octicon { margin-bottom: 0px; }
+  .column-container { flex-wrap: nowrap !important; }
+  .left-column { padding-right: 16px; }
+  .avatar { transform: scale(1.0) !important }
 }
 
-@media (min-width: 700px) {
-    .pinned-list { flex-direction: row; }
+@media (min-width: 800px) {
+  .pinned-list { flex-direction: row; }
+  .dummy-tile { display: flex !important }
 }
 
-@media (min-width: 1010px) {
-    .container {
-        width: 725px;
-        display: flex;
-    }
-    .events-explainer { display: none; }
+/*@media (min-width: 1010px) {
+  .container {
+      width: 725px;
+      display: flex;
+  }
+  .dummy-tile { display: flex !important }
+}*/
+
+.sk-folding-cube {
+  margin: 20px auto;
+  width: 40px;
+  height: 40px;
+  position: relative;
+  -webkit-transform: rotateZ(45deg);
+          transform: rotateZ(45deg);
+}
+
+.sk-folding-cube .sk-cube {
+  float: left;
+  width: 50%;
+  height: 50%;
+  position: relative;
+  -webkit-transform: scale(1.1);
+      -ms-transform: scale(1.1);
+          transform: scale(1.1); 
+}
+.sk-folding-cube .sk-cube:before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #5C8DF6;
+  -webkit-animation: sk-foldCubeAngle 2.4s infinite linear both;
+          animation: sk-foldCubeAngle 2.4s infinite linear both;
+  -webkit-transform-origin: 100% 100%;
+      -ms-transform-origin: 100% 100%;
+          transform-origin: 100% 100%;
+}
+.sk-folding-cube .sk-cube2 {
+  -webkit-transform: scale(1.1) rotateZ(90deg);
+          transform: scale(1.1) rotateZ(90deg);
+}
+.sk-folding-cube .sk-cube3 {
+  -webkit-transform: scale(1.1) rotateZ(180deg);
+          transform: scale(1.1) rotateZ(180deg);
+}
+.sk-folding-cube .sk-cube4 {
+  -webkit-transform: scale(1.1) rotateZ(270deg);
+          transform: scale(1.1) rotateZ(270deg);
+}
+.sk-folding-cube .sk-cube2:before {
+  -webkit-animation-delay: 0.3s;
+          animation-delay: 0.3s;
+}
+.sk-folding-cube .sk-cube3:before {
+  -webkit-animation-delay: 0.6s;
+          animation-delay: 0.6s; 
+}
+.sk-folding-cube .sk-cube4:before {
+  -webkit-animation-delay: 0.9s;
+          animation-delay: 0.9s;
+}
+@-webkit-keyframes sk-foldCubeAngle {
+  0%, 10% {
+    -webkit-transform: perspective(140px) rotateX(-180deg);
+            transform: perspective(140px) rotateX(-180deg);
+    opacity: 0; 
+  } 25%, 75% {
+    -webkit-transform: perspective(140px) rotateX(0deg);
+            transform: perspective(140px) rotateX(0deg);
+    opacity: 1; 
+  } 90%, 100% {
+    -webkit-transform: perspective(140px) rotateY(180deg);
+            transform: perspective(140px) rotateY(180deg);
+    opacity: 0; 
+  } 
+}
+
+@keyframes sk-foldCubeAngle {
+  0%, 10% {
+    -webkit-transform: perspective(140px) rotateX(-180deg);
+            transform: perspective(140px) rotateX(-180deg);
+    opacity: 0; 
+  } 25%, 75% {
+    -webkit-transform: perspective(140px) rotateX(0deg);
+            transform: perspective(140px) rotateX(0deg);
+    opacity: 1; 
+  } 90%, 100% {
+    -webkit-transform: perspective(140px) rotateY(180deg);
+            transform: perspective(140px) rotateY(180deg);
+    opacity: 0; 
+  }
 }

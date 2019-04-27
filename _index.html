@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Alexander Becker</title>
+    <meta name="description" content="Think big.">
+    <meta name="keywords" content="Machine Learning TUM Homepage Alexander Becker AI">
+    <meta name="author" content="Alexander Becker">
+    <meta name="og:title" content="Alexander Becker">
+    <meta name="og:description" content="Think big.">
+
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet">
+    <link href="./css/primer-core.css" rel="stylesheet">
+    <link href="./css/style.css" rel="stylesheet">
+
+    <script type="text/javascript">
+      function write_mail(name, domain) {
+        document.write('<a href="mai');
+        document.write('lto:' + [...name].reverse().join('') + '@');
+        document.write([...domain].reverse().join('') + '">' + [...name].reverse().join(''));
+        document.write('<span style="display: none">123</span>@' + [...domain].reverse().join('') + '</a>');
+      }
+    </script>
+  </head>
+  <body>
+
+    <header class="main-content mx-auto p-responsive d-flex flex-items-center flex-wrap"></header>
+
+    <div class="main-content mx-auto px-3 p-responsive mt-4">
+      <div class="d-flex flex-justify-around flex-wrap column-container">
+
+        <section class="mb-6 left-column">
+          <img class="avatar width-full rounded-1" src="./assets/img/profile.jpeg" alt="Alexander Becker" style="transform: scale(0.9);">
+          <div class="py-3">
+            <h1 class="text-bold summary-name mb-1">Alexander&nbsp;Becker</h1>
+            <h2 class="f3-light text-gray summary-subtitle">Think big</h2>
+          </div>
+          <p class="f5 mb-3 gray-900-text">
+          I'm a graduate student at Technical University of Munich, focusing on artificial intelligence and machine learning. In particular, I'm interested in deep neural networks and the mathematics behind them. Besides my studies, I'm passionate about web development as well as software engineering.
+          </p>
+          <ul class="list-style-none border-top border-gray-light py-3">
+            <li class="d-flex flex-row flex-items-center flex-justify-start pt-1">
+              <i class="material-icons-outlined mr-2" style="width: 22px; margin-left: 4px; font-size: 22px">work_outlined</i>
+              <span>Netfira GmbH</span>
+            </li>
+            <li class="d-flex flex-row flex-items-center flex-justify-start pt-1">
+              <i class="material-icons-outlined mr-2" style="width: 22px; margin-left: 4px; font-size: 22px">school</i>
+              <span>Technical University Munich</span>
+            </li>
+            <li class="d-flex flex-row flex-items-center flex-justify-start pt-1">
+              <i class="material-icons-outlined mr-2" style="width: 22px; margin-left: 4px; font-size: 22px">email</i>
+              <script>write_mail('rekceb.rednaxela', 'ude.mut.sc')</script>
+            </li>
+            <li class="d-flex flex-row flex-items-center flex-justify-start pt-1">
+              <i class="material-icons-outlined mr-2" style="width: 22px; margin-left: 4px; font-size: 22px">code</i>
+              <a href="https://github.com/alebeck"> github.com/alebeck</a>
+            </li>
+          </ul>
+        </section>
+
+        <div class="pb-4 pl-2" style="width: 1050px">
+          <nav class="UnderlineNav">
+            <div class="UnderlineNav-body">
+              <a href="#url" title="Overview" class="UnderlineNav-item selected">Projects</a>
+              <a href="#interests" title="Interests" class="UnderlineNav-item">Interests</a>
+            </div>
+          </nav>
+
+          <section class="mt-4" aria-labelledby="section-1-header">
+            <h3 id="section-1-header" class="f4 mb-2 text-normal">Projects</h3>
+            <ul id="project-list" class="d-flex flex-column list-style-none mb-4">
+
+                <!-- project template -->
+                <li id="project-template" class="d-flex p-3 mb-3 mr-2 border border-gray-dark rounded-1 pinned-item" style="display: none !important; flex-direction: column; width: 100%">
+                    <h5 class="text-bold">
+                      <a class="project-title"></a>
+                    </h5>
+                    <p class="project-description pinned-item-desc text-gray text-small d-block mt-2 mb-3" style="flex: 1 0 auto"></p>
+                    <div class="d-flex flex-row flex-justify-start">
+                      <div class="mr-3">
+                        <span class="language-indicator position-relative d-inline-block"></span>
+                        <small class="project-language f6 text-gray"></small>
+                      </div>
+                    </div>
+                </li>
+
+                <div id="project-loader">
+                  <div class="sk-folding-cube" style="transform: scale(0.8);">
+                    <div class="sk-cube1 sk-cube"></div>
+                    <div class="sk-cube2 sk-cube"></div>
+                    <div class="sk-cube4 sk-cube"></div>
+                    <div class="sk-cube3 sk-cube"></div>
+                  </div>  
+                  <div style="text-align: center; margin-top: -8px;">Loading projects</div>
+                </div>
+
+                <div id="loading-failed-indicator" style="text-align: center; display: none;">
+                  <i class="material-icons-outlined" style="font-size: 48px">error_outline</i>
+                  <div>Projects could not be loaded</div>
+                </div>
+              
+            </ul>
+          </section>
+
+          <section id="interests" class="mt-4" aria-labelledby="section-1-header">
+            <h3 id="section-1-header" class="f4 mb-2 text-normal">Interests</h3>
+
+            <div style="opacity: 0.9">
+              <div class="summary-toolkit p-2 rounded-1 my-1 mr-1 text-white f6 blue-500">Machine Learning</div>
+
+              <div class="summary-toolkit p-2 rounded-1 my-1 mr-1 text-white f6 green-400">Deep Learning</div>
+
+              <div class="summary-toolkit p-2 rounded-1 my-1 mr-1 text-white f6 gray-700">Artificial Intelligence</div>
+
+              <div class="summary-toolkit p-2 rounded-1 my-1 mr-1 text-white f6 yellow-400">PyTorch</div>
+
+              <div class="summary-toolkit p-2 rounded-1 my-1 mr-1 text-white f6 red-400">Data Analysis</div>
+
+              <div class="summary-toolkit p-2 rounded-1 my-1 mr-1 text-white f6" style="background: #3572a5">Python</div>
+
+              <div class="summary-toolkit p-2 rounded-1 my-1 mr-1 text-white f6 orange-400">AWS</div>
+
+              <div class="summary-toolkit p-2 rounded-1 my-1 mr-1 text-white f6 blue-500">Docker</div>
+
+              <div class="summary-toolkit p-2 rounded-1 my-1 mr-1 text-white f6" style="background: #f1e05a">JavaScript</div>
+
+              <div class="summary-toolkit p-2 rounded-1 my-1 mr-1 text-white f6 purple-500">Continuous Integration</div>
+
+              <div class="summary-toolkit p-2 rounded-1 my-1 mr-1 text-white f6" style="background: #dea584">Rust</div>
+
+              <div class="summary-toolkit p-2 rounded-1 my-1 mr-1 text-white f6 red-400">Linux</div>
+
+              <div class="summary-toolkit p-2 rounded-1 my-1 mr-1 text-white f6 purple-400">Shell</div>
+
+              <div class="summary-toolkit p-2 rounded-1 my-1 mr-1 text-white f6 green-400">Git</div>
+
+              <div class="summary-toolkit p-2 rounded-1 my-1 mr-1 text-white f6 gray-400">Databases</div>
+            </div>
+
+          </section>
+
+        </div>
+      </div>
+
+      <footer class="mb-6 pt-4 border-top">
+        <p class="mb-2">
+          &copy; 2019 Alexander Becker
+        </p>
+      </footer>
+    </div>
+
+    <script src="https://unpkg.com/github-api/dist/GitHub.bundle.min.js" type="text/javascript"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.0/jquery.slim.min.js" type="text/javascript"></script>
+    <script src="js/colors.js"></script>
+    <script src="js/main.js"></script>
+
+  </body>
+</html>
