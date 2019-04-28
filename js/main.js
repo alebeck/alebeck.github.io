@@ -4,10 +4,9 @@ const gh = new GitHub();
 
 let a = gh
 	.search()
-	.forRepositories({q: 'user:alebeck org:TUM-ML-Lab18'})
+	.forRepositories({q: 'user:alebeck org:TUM-ML-Lab18 fork:true'})
 	.then(response => {
 		let repos = prioritizeProjects(response.data);
-		console.log(repos[0]);
 		let numberRows = Math.ceil(repos.length / 2);
 	
 		for (var i = 0; i < numberRows; i++) {
@@ -59,10 +58,35 @@ function makeDummyTile() {
 }
 
 function prioritizeProjects(repos) {
-	return repos.sort((a, b) => {
-		if (a.language == 'Python' || a.language == 'Jupyter Notebook') {
+	// show these repos first
+	let prios = [
+		'FaceSwap',
+		'AIOps',
+		'DigitRecognition',
+		'BokehHub'
+	]
+
+	// repos written in these langs are displayed next
+	let langs = [
+		'Python',
+		'Jupyter Notebook'
+	]
+
+	let result = []
+	for (var prio of prios) {
+		let i = repos.findIndex(repo => repo.name === prio)
+		result.push(...(repos.splice(i, 1)));
+	}
+
+	result.push(...repos.sort((a, b) => {
+		if (langs.includes(a.language)) {
 			return -1;
 		}
+		if (langs.includes(b.language)) {
+			return 1;
+		}
 		return 0;
-	});
+	}));
+
+	return result;
 }
