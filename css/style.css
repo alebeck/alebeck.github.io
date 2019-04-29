@@ -1,4 +1,4 @@
-header { height: 10px; }
+header { height: 3px; }
 
 .main-content { max-width: 1010px; }
 
@@ -32,7 +32,7 @@ header { height: 10px; }
 .black { background-color: #1b1f23; }
 
 .left-column { max-width: 380px; }
-.right-column { width: 1050px; }
+/*.right-column { width: 1050px; }*/
 .summary-name {
   font-size: 26px;
   line-height: 30px;
@@ -61,7 +61,10 @@ header { height: 10px; }
 @media (min-width: 600px) {
   header { height: 20px; }
   .column-container { flex-wrap: nowrap !important; }
-  .left-column { padding-right: 16px; }
+  .left-column { 
+    padding-right: 16px;
+    max-width: 250px;
+  }
   .right-column { padding-left: 8px; }
   .avatar { transform: scale(1.0) !important }
 }
