@@ -74,7 +74,7 @@ function prioritizeProjects(repos) {
 
 	let result = []
 	for (var prio of prios) {
-		let i = repos.findIndex(repo => repo.name === prio)
+		let i = repos.findIndex(repo => repo.name === prio);
 		result.push(...(repos.splice(i, 1)));
 	}
 
