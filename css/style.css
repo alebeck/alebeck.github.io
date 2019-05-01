@@ -43,6 +43,12 @@ header { height: 3px; }
   display: inline-block;
 }
 
+.research-list { padding-top: 0 !important; }
+.research-list li {
+  border-left: 2px solid #e16220;
+  padding-left: 8px;
+}
+
 .pinned-list { flex-direction: column; }
 .pinned-item { flex: 48%; }
 .language-indicator {
