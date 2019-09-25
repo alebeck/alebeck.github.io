@@ -4,7 +4,7 @@ const gh = new GitHub();
 
 let a = gh
 	.search()
-	.forRepositories({q: 'user:alebeck org:TUM-ML-Lab18 fork:true'})
+	.forRepositories({q: 'user:alebeck org:TUM-ML-Lab18 fork:false'})
 	.then(response => {
 		let repos = prioritizeProjects(response.data);
 		let numberRows = Math.ceil(repos.length / 2);
