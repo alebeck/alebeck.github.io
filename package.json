@@ -6,8 +6,8 @@
     "serve": "live-server"
   },
   "repository": {
-    "type": "git",
-  }
+    "type": "git"
+  },
   "author": "Alexander Becker",
   "license": "MIT",
   "dependencies": {

@@ -63,6 +63,7 @@ function prioritizeProjects(repos) {
 		'FaceSwap',
 		'AIOps',
 		'DigitRecognition',
+		'ImageRetrieval',
 		'BokehHub'
 	]
 

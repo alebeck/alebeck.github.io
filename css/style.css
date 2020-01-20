@@ -43,10 +43,16 @@ header { height: 3px; }
   display: inline-block;
 }
 
+.project-tile { margin-right: 14px; }
+.project-tile:nth-child(2) { margin-right: 0; }
+
 .research-list { padding-top: 0 !important; }
 .research-list li {
   border-left: 2px solid #e16220;
   padding-left: 8px;
+}
+.research-list li:not(:first-child) {
+    margin-top: 5px;
 }
 
 .pinned-list { flex-direction: column; }
