@@ -55,6 +55,22 @@
     margin-top: 5px;
 }
 
+.timeline-stretch {
+  flex-basis: auto;
+  flex-grow: 2;
+}
+.timeline-horizontal { height: 1px; }
+.timeline-line-top {
+  height: 13px;
+  width: 2px;
+}
+.timeline-circle-marker {
+  height: 32px !important;
+  width: 32px !important;
+  border-radius: 100px;
+}
+.timeline-line-bottom { width: 2px; }
+
 .pinned-list { flex-direction: column; }
 .pinned-item { flex: 48%; }
 .language-indicator {
@@ -79,7 +95,6 @@
   .column-container { flex-wrap: nowrap !important; }
   .left-column { 
     padding-right: 16px;
-    max-width: 250px;
   }
   .right-column { padding-left: 8px; }
   .avatar { transform: scale(1.0) !important }
@@ -96,7 +111,6 @@
   .dummy-tile { display: flex !important }
   .left-column {
     padding-right: 24px;
-    max-width: 350px;
   }
 }
 

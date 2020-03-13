@@ -1180,7 +1180,7 @@ let ghColors = {
         "url": "https://github.com/trending?l=RUNOFF"
     },
     "Rust": {
-        "color": "#dea584",
+        "color": "#8a63d2",
         "url": "https://github.com/trending?l=Rust"
     },
     "Sage": {
