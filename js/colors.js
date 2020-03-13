@@ -600,7 +600,7 @@ let ghColors = {
         "url": "https://github.com/trending?l=Java-Server-Pages"
     },
     "JavaScript": {
-        "color": "#f1e05a",
+        "color": "#FFD33D",
         "url": "https://github.com/trending?l=JavaScript"
     },
     "JFlex": {
@@ -1076,7 +1076,7 @@ let ghColors = {
         "url": "https://github.com/trending?l=PureScript"
     },
     "Python": {
-        "color": "#3572A5",
+        "color": "#0366d6",
         "url": "https://github.com/trending?l=Python"
     },
     "Python console": {
