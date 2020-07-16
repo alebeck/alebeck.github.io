@@ -29,7 +29,7 @@
 .purple-700 { background-color: #4c2889; }
 .black { background-color: #1b1f23; }
 
-.left-column { max-width: 350px; }
+.left-column { max-width: 250px; }
 /*.right-column { width: 1050px; }*/
 .summary-name {
   font-size: 26px;
@@ -93,6 +93,7 @@
 @media (min-width: 600px) {
   header { height: 20px; }
   .column-container { flex-wrap: nowrap !important; }
+  .left-column { max-width: 350px; }
   .left-column { 
     padding-right: 16px;
   }
