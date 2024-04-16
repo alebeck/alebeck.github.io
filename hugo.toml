@@ -17,8 +17,8 @@ style = "github-dark"
   author = "Alex Becker"
   # I make machines see
   info = "I teach machines how to see"
-  description = "John Doe's personal website"
-  keywords = "vision,ai,developer,research,personal"
+  description = "Alex Becker"
+  keywords = "vision,ai,developer,research"
   avatarurl = "images/avatar.png"
 
   #faviconSVG = "/img/favicon.svg"
@@ -31,7 +31,6 @@ style = "github-dark"
 
   colorScheme = "auto"
   hidecolorschemetoggle = false
-  commit = "https://github.com/luizdepra/hugo-coder/tree/"
 
   # customCSS = ["css/custom.css"]
   customSCSS = ["scss/custom.scss"]
