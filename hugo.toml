@@ -1,0 +1,87 @@
+baseurl = "http://a1ex.dev"
+title = "Alex Becker"
+theme = "hugo-coder"
+languagecode = "en"
+defaultcontentlanguage = "en"
+
+paginate = 20
+
+disqusShortname = "yourdiscussshortname"
+
+enableGitInfo = true
+
+[markup.highlight]
+style = "github-dark"
+
+[params]
+  author = "Alex Becker"
+  # I make machines see
+  info = "I teach machines how to see"
+  description = "John Doe's personal website"
+  keywords = "vision,ai,developer,research,personal"
+  avatarurl = "images/avatar.png"
+
+  #faviconSVG = "/img/favicon.svg"
+  #favicon_32 = "images/favicon.png"
+  #favicon_16 = "images/favicon.png"
+
+  since = ""
+
+  enableTwemoji = true
+
+  colorScheme = "auto"
+  hidecolorschemetoggle = false
+  commit = "https://github.com/luizdepra/hugo-coder/tree/"
+
+  # customCSS = ["css/custom.css"]
+  customSCSS = ["scss/custom.scss"]
+  # customJS = ["js/custom.js"]
+
+[taxonomies]
+  category = "categories"
+  series = "series"
+  tag = "tags"
+  author = "authors"
+
+# Social links
+[[params.social]]
+  name = "Github"
+  icon = "fa-brands fa-github fa-2x"
+  weight = 1
+  url = "https://github.com/alebeck/"
+[[params.social]]
+  name = "Google Scholar"
+  icon = "fa-brands fa-google-scholar fa-2x"
+  weight = 2
+  url = "https://scholar.google.com/citations?user=Wle2GmkAAAAJ&hl=en"
+[[params.social]]
+  name = "Linkedin"
+  icon = "fa-brands fa-linkedin fa-2x"
+  weight = 3
+  url = "https://ch.linkedin.com/in/alexander-becker-983343119"
+[[params.social]]
+  name = "Mail"
+  icon = "fa fa-envelope fa-2x"
+  weight = 4
+  url = "mailto:alexander.becker@geod.baug.ethz.ch"
+
+# Menu links
+[[menu.main]]
+  name = "Home"
+  weight = 1
+  url  = "/"
+[[menu.main]]
+  name = "About"
+  weight = 2
+  url = "about/"
+[[menu.main]]
+  name = "Research"
+  weight = 3
+  url = "research/"
+#[[menu.main]]
+#  name = "Blog"
+#  weight = 3
+#  url  = "posts/"
+
+[markup.goldmark.renderer]
+unsafe = true
