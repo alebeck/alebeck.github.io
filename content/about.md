@@ -4,7 +4,7 @@ title = "About"
 
 ![](/images/avatar.png#avatar-about)
 
-Hi, I'm Alex! I am working on low-level vision problems, particularly super-resolution and other inverse problems. I am also interested in probabilistic deep learning and its applications to remote sensing.
+Hi, I'm Alex! I work on low-level vision problems, particularly super-resolution and other inverse problems. I am also interested in probabilistic deep learning and its applications to remote sensing.
 
 ## Education
 
@@ -15,5 +15,6 @@ Hi, I'm Alex! I am working on low-level vision problems, particularly super-reso
 
 ## Experience
 
-* (ongoing) Research Assistant, ETH Zurich
+* (ongoing) Research Intern, Disney Research, Zurich
+* (ongoing) Research Assistant, ETH Zurich, Zurich
 * Machine Learning Engineer, Netfira, Munich

@@ -1,7 +1,7 @@
 {
 	"version": 3,
 	"file": "custom.css",
-	"sourceRoot": "/Users/alex/Projects/website",
+	"sourceRoot": "/Users/alex/src/website",
 	"sources": [
 		"assets/scss/custom.scss"
 	],
