@@ -33,6 +33,10 @@ section.page {
   }
 }
 
+h2.info {
+  font-weight: 500;
+}
+
 img[src$='#avatar-about']
 {
   float:right;
@@ -82,3 +86,10 @@ img[src$='#avatar-about']
   }
 }
 
+.colorscheme-toggle {
+  cursor: pointer;
+}
+
+.heading-link {
+  visibility: hidden !important;
+}

@@ -1,7 +1,7 @@
 {
 	"version": 3,
 	"file": "custom.css",
-	"sourceRoot": "/Users/alex/src/website",
+	"sourceRoot": "/home/albecker/scratch3/projects/alebeck.github.io",
 	"sources": [
 		"assets/scss/custom.scss"
 	],

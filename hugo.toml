@@ -4,10 +4,6 @@ theme = "hugo-coder"
 languagecode = "en"
 defaultcontentlanguage = "en"
 
-paginate = 20
-
-disqusShortname = "yourdiscussshortname"
-
 enableGitInfo = true
 
 [markup.highlight]
@@ -15,7 +11,6 @@ style = "github-dark"
 
 [params]
   author = "Alex Becker"
-  # I make machines see
   info = "I teach machines how to see"
   description = "Alex Becker"
   keywords = "vision,ai,developer,research"
@@ -27,7 +22,7 @@ style = "github-dark"
 
   since = ""
 
-  enableTwemoji = true
+  enableTwemoji = false
 
   colorScheme = "auto"
   hidecolorschemetoggle = false
@@ -37,10 +32,7 @@ style = "github-dark"
   # customJS = ["js/custom.js"]
 
 [taxonomies]
-  category = "categories"
-  series = "series"
-  tag = "tags"
-  author = "authors"
+
 
 # Social links
 [[params.social]]
@@ -77,10 +69,6 @@ style = "github-dark"
   name = "Research"
   weight = 3
   url = "research/"
-#[[menu.main]]
-#  name = "Blog"
-#  weight = 3
-#  url  = "posts/"
 
 [markup.goldmark.renderer]
 unsafe = true
