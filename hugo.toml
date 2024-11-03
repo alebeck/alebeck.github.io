@@ -10,8 +10,8 @@ enableGitInfo = true
 style = "github-dark"
 
 [params]
-  author = "Alex Becker"
-  info = "I teach machines how to see"
+  author = "Alexander Becker"
+  info = "I teach machines to see"
   description = "Alex Becker"
   keywords = "vision,ai,developer,research"
   avatarurl = "images/avatar.png"
