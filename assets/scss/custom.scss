@@ -58,6 +58,13 @@ section.page {
   }
 }
 
+body {
+  @media only screen and (max-width: 768px) {
+    font-size: 1.7em;
+    line-height: 1.7em;
+  }
+}
+
 .navigation-link {
   font-size: 1.05em !important;
 }
