@@ -65,6 +65,13 @@ body {
   }
 }
 
+.content header {
+  @media only screen and (max-width: 768px) {
+    margin-top: 2.2rem;
+    margin-bottom: 3.2rem;
+  }
+}
+
 .navigation-link {
   font-size: 1.05em !important;
 }
