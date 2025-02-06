@@ -2,7 +2,7 @@
 title = "About"
 +++
 
-Hi, I'm Alex! I work on low-level vision problems, particularly super-resolution and other inverse problems. I am also interested in probabilistic deep learning and its applications to remote sensing.
+Hi, I'm Alex! I work on low-level vision problems, particularly (depth) super-resolution and other inverse problems. I'm also interested in probabilistic deep learning and its applications to remote sensing.
 
 ## Education
 

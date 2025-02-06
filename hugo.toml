@@ -69,6 +69,11 @@ style = "github-dark"
   name = "Research"
   weight = 3
   url = "research/"
+[[menu.main]]
+  name = "Code"
+  weight = 4
+  url = "https://github.com/alebeck/"
+  target = "_blank"
 
 [markup.goldmark.renderer]
 unsafe = true

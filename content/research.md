@@ -5,6 +5,12 @@ title = "Research"
 ## 2024
 
 {{< paper >}}
+[Marigold-DC: Zero-Shot Monocular Depth Completion with Guided Diffusion](https://arxiv.org/abs/2412.13389)\
+M. Viola, K. Qu, N. Metzger, B. Ke, **A. Becker**, K. Schindler, A. Obukhov\
+*arXiv preprint*
+{{< /paper >}}
+
+{{< paper >}}
 [LoRA-Ensemble: Efficient Uncertainty Modelling for Self-attention Networks](https://arxiv.org/abs/2405.14438)\
 M. Halbheer, D. J. Mühlematter, **A. Becker**, D. Narnhofer, H. Aasen, K. Schindler, M. O. Turkoglu\
 *arXiv preprint*
@@ -14,7 +20,7 @@ M. Halbheer, D. J. Mühlematter, **A. Becker**, D. Narnhofer, H. Aasen, K. Schin
 
 {{< paper >}}
 [Neural Fields with Thermal Activations for Arbitrary-Scale Super-Resolution](https://arxiv.org/abs/2311.17643)\
-**A. Becker*** , R. C. Daudt*, N. Metzger, J. D. Wegner, K. Schindler\
+**A. Becker*** , R. C. Daudt*, N. Metzger, J. D. Wegner, K. Schindler (*equal contr.)\
 *arXiv preprint*
 {{< /paper >}}
 
@@ -28,7 +34,7 @@ M. Halbheer, D. J. Mühlematter, **A. Becker**, D. Narnhofer, H. Aasen, K. Schin
 
 {{< paper >}}
 [Learning Graph Regularisation for Guided Super-Resolution](https://openaccess.thecvf.com/content/CVPR2022/html/de_Lutio_Learning_Graph_Regularisation_for_Guided_Super-Resolution_CVPR_2022_paper.html)\
-R. De Lutio*, **A. Becker***, S. D'Aronco, S. Russo, J. D. Wegner, K. Schindler\
+R. De Lutio*, **A. Becker***, S. D'Aronco, S. Russo, J. D. Wegner, K. Schindler (*equal contrib.)\
 *CVPR 2022*
 {{< /paper >}}
 
