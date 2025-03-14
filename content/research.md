@@ -2,6 +2,14 @@
 title = "Research"
 +++
 
+## 2025
+
+{{< paper >}}
+[Thera: Aliasing-Free Arbitrary-Scale Super-Resolution with Neural Heat Fields](https://arxiv.org/abs/2311.17643)\
+**A. Becker*** , R. C. Daudt*, D. Narnhofer, T. Peters, N. Metzger, J. D. Wegner, K. Schindler (*equal contr.)\
+*arXiv preprint*
+{{< /paper >}}
+
 ## 2024
 
 {{< paper >}}
@@ -17,12 +25,6 @@ M. Halbheer, D. J. Mühlematter, **A. Becker**, D. Narnhofer, H. Aasen, K. Schin
 {{< /paper >}}
 
 ## 2023
-
-{{< paper >}}
-[Neural Fields with Thermal Activations for Arbitrary-Scale Super-Resolution](https://arxiv.org/abs/2311.17643)\
-**A. Becker*** , R. C. Daudt*, N. Metzger, J. D. Wegner, K. Schindler (*equal contr.)\
-*arXiv preprint*
-{{< /paper >}}
 
 {{< paper >}}
 [Country-wide Retrieval of Forest Structure from Optical and SAR Satellite Imagery with Deep Ensembles](https://www.sciencedirect.com/science/article/pii/S0924271622003045)\
