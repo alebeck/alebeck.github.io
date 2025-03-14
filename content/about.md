@@ -2,14 +2,13 @@
 title = "About"
 +++
 
-Hi, I'm Alex! I work on low-level vision problems, particularly (depth) super-resolution and other inverse problems. I'm also interested in probabilistic deep learning and its applications to remote sensing.
+Hi, I'm Alex! I work on low-level vision problems, particularly super-resolution and other inverse problems. I'm also interested in probabilistic deep learning and its applications to remote sensing.
 
 ## Education
 
 * (ongoing) PhD in computer vision, Photogrammetry and Remote Sensing group, ETH Zurich
 * M.Sc. in informatics, TU Munich 
 * B.Sc. in informatics, TU Munich 
-
 
 ## Experience
 

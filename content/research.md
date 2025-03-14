@@ -6,7 +6,7 @@ title = "Research"
 
 {{< paper >}}
 [Thera: Aliasing-Free Arbitrary-Scale Super-Resolution with Neural Heat Fields](https://arxiv.org/abs/2311.17643)\
-**A. Becker*** , R. C. Daudt*, D. Narnhofer, T. Peters, N. Metzger, J. D. Wegner, K. Schindler (*equal contr.)\
+**A. Becker*** , R. C. Daudt*, D. Narnhofer, T. Peters, N. Metzger, J. D. Wegner, K. Schindler (*equal contrib.)\
 *arXiv preprint*
 {{< /paper >}}
 
