@@ -5,18 +5,24 @@ title = "Research"
 ## 2025
 
 {{< paper >}}
+[The unrealized potential of agroforestry for an emissions-intensive agricultural commodity](https://arxiv.org/abs/2410.20882)\
+**A. Becker**, J. D. Wegner, E. Dawoe, K. Schindler, \dots, W. J. Blaser-Hart\
+*Nature Sustainability (accepted)*
+{{< /paper >}}
+
+{{< paper >}}
 [Thera: Aliasing-Free Arbitrary-Scale Super-Resolution with Neural Heat Fields](https://arxiv.org/abs/2311.17643)\
 **A. Becker*** , R. C. Daudt*, D. Narnhofer, T. Peters, N. Metzger, J. D. Wegner, K. Schindler (*equal contrib.)\
 *arXiv preprint*
 {{< /paper >}}
 
-## 2024
-
 {{< paper >}}
 [Marigold-DC: Zero-Shot Monocular Depth Completion with Guided Diffusion](https://arxiv.org/abs/2412.13389)\
 M. Viola, K. Qu, N. Metzger, B. Ke, **A. Becker**, K. Schindler, A. Obukhov\
-*arXiv preprint*
+*ICCV 2025 (accepted)*
 {{< /paper >}}
+
+## 2024
 
 {{< paper >}}
 [LoRA-Ensemble: Efficient Uncertainty Modelling for Self-attention Networks](https://arxiv.org/abs/2405.14438)\

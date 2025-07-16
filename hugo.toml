@@ -61,10 +61,10 @@ style = "github-dark"
   name = "Home"
   weight = 1
   url  = "/"
-[[menu.main]]
-  name = "About"
-  weight = 2
-  url = "about/"
+#[[menu.main]]
+#  name = "About"
+#  weight = 2
+#  url = "about/"
 [[menu.main]]
   name = "Research"
   weight = 3
