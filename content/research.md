@@ -6,7 +6,7 @@ title = "Research"
 
 {{< paper >}}
 [The unrealized potential of agroforestry for an emissions-intensive agricultural commodity](https://arxiv.org/abs/2410.20882)\
-**A. Becker**, J. D. Wegner, E. Dawoe, K. Schindler, \dots, W. J. Blaser-Hart\
+**A. Becker**, J. D. Wegner, E. Dawoe, K. Schindler, ..., W. J. Blaser-Hart\
 *Nature Sustainability (accepted)*
 {{< /paper >}}
 
