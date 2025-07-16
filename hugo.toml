@@ -11,7 +11,7 @@ style = "github-dark"
 
 [params]
   author = "Alexander Becker"
-  info = "I teach machines to see"
+  info = ["PhD Student @ ETHZ", "Generalizable & Trustworthy Machine Learning"]
   description = "Alex Becker"
   keywords = "vision,ai,developer,research"
   avatarurl = "images/avatar.png"
