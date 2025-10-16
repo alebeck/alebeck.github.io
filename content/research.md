@@ -5,15 +5,21 @@ title = "Research"
 ## 2025
 
 {{< paper >}}
-[The unrealized potential of agroforestry for an emissions-intensive agricultural commodity](https://arxiv.org/abs/2410.20882)\
-**A. Becker**, J. D. Wegner, E. Dawoe, K. Schindler, ..., W. J. Blaser-Hart\
-*Nature Sustainability (accepted)*
+[Continuous Space-Time Video Super-Resolution with 3D Fourier Fields](https://v3vsr.github.io/)\
+**A. Becker**, J. Erbach, D. Narnhofer, K. Schindler\
+*arXiv preprint*
 {{< /paper >}}
 
 {{< paper >}}
-[Thera: Aliasing-Free Arbitrary-Scale Super-Resolution with Neural Heat Fields](https://arxiv.org/abs/2311.17643)\
+[Thera: Aliasing-Free Arbitrary-Scale Super-Resolution with Neural Heat Fields](https://therasr.github.io/)\
 **A. Becker*** , R. C. Daudt*, D. Narnhofer, T. Peters, N. Metzger, J. D. Wegner, K. Schindler (*equal contrib.)\
-*arXiv preprint*
+*TMLR (accepted)*
+{{< /paper >}}
+
+{{< paper >}}
+[The unrealized potential of agroforestry for an emissions-intensive agricultural commodity](https://arxiv.org/abs/2410.20882)\
+**A. Becker**, J. D. Wegner, E. Dawoe, K. Schindler, ..., W. J. Blaser-Hart\
+*Nature Sustainability*
 {{< /paper >}}
 
 {{< paper >}}
