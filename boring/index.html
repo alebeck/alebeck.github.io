@@ -1,0 +1,1110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>boring — SSH tunnel manager</title>
+  <meta name="description" content="A simple command-line SSH tunnel manager that just works. Configurable via TOML, compatible with ssh_config, with automatic reconnections." />
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="`boring` SSH tunnel manager" />
+  <meta property="og:description" content="A simple command-line SSH tunnel manager that just works. Configurable via TOML, compatible with ssh_config, with automatic reconnections." />
+  <meta property="og:image" content="https://raw.githubusercontent.com/alebeck/boring/main/assets/gopher.png" />
+  <meta property="og:url" content="https://alebeck.github.io/boring" />
+
+  <!-- Twitter / X -->
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="`boring` SSH tunnel manager" />
+  <meta name="twitter:description" content="A simple command-line SSH tunnel manager that just works. Configurable via TOML, compatible with ssh_config, with automatic reconnections." />
+  <meta name="twitter:image" content="https://raw.githubusercontent.com/alebeck/boring/main/assets/gopher.png" />
+  <link rel="icon" type="image/png" href="favicon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet" />
+  <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      background: oklch(9% 0.01 260);
+      color: oklch(92% 0.01 80);
+      font-family: 'DM Sans', sans-serif;
+      -webkit-font-smoothing: antialiased;
+      min-height: 100vh;
+    }
+
+    /* ── Nav ── */
+    .nav {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 24px clamp(24px, 5vw, 80px);
+      border-bottom: 1px solid oklch(18% 0.01 260);
+      position: sticky; top: 0; z-index: 10;
+      background: oklch(9% 0.01 260 / 0.92);
+      backdrop-filter: blur(12px);
+    }
+    .nav-left { display: flex; align-items: center; gap: 12px; }
+    .nav-logo {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 17px; font-weight: 600;
+      color: oklch(96% 0.005 80);
+      letter-spacing: -0.03em;
+      text-decoration: none;
+      line-height: 1;
+    }
+    .nav-version {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      background: oklch(16% 0.02 155);
+      color: var(--accent, oklch(72% 0.14 155));
+      border: 1px solid oklch(28% 0.08 155);
+      padding: 3px 9px; border-radius: 100px;
+      letter-spacing: 0.04em;
+      white-space: nowrap;
+      line-height: 1;
+      vertical-align: middle;
+      position: relative;
+      top: 1px;
+      text-decoration: none;
+      transition: border-color 0.15s;
+    }
+    .nav-version:hover { border-color: var(--accent, oklch(60% 0.14 155)); }
+    .nav-links {
+      display: flex; gap: 28px; align-items: center;
+    }
+    .nav-links a {
+      font-size: 13px; color: oklch(45% 0.01 260);
+      text-decoration: none; letter-spacing: 0.05em; text-transform: uppercase;
+      transition: color 0.15s;
+    }
+    .nav-links a:hover { color: oklch(72% 0.14 155); }
+    .nav-gh {
+      display: flex; align-items: center; gap: 7px;
+      font-size: 13px; color: oklch(45% 0.01 260);
+      text-decoration: none; transition: color 0.15s;
+    }
+    .nav-gh:hover { color: oklch(80% 0.01 80); }
+    @media (max-width: 640px) {
+      .nav-links { display: none; }
+    }
+
+    /* ── Hero ── */
+    .hero {
+      padding: clamp(60px, 10vw, 100px) clamp(24px, 5vw, 80px) clamp(48px, 7vw, 72px);
+      text-align: center;
+      display: flex; flex-direction: column; align-items: center;
+    }
+    .hero-tagline {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px; font-weight: 400;
+      color: var(--accent, oklch(72% 0.14 155));
+      letter-spacing: 0.14em; text-transform: uppercase;
+      margin-bottom: 20px;
+    }
+    .hero-title {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: clamp(52px, 10vw, 96px);
+      font-weight: 600; line-height: 1;
+      letter-spacing: -0.04em;
+      color: oklch(96% 0.005 80);
+      margin-bottom: 20px;
+    }
+    .hero-subtitle {
+      font-size: clamp(15px, 2vw, 18px);
+      font-weight: 300; line-height: 1.65;
+      color: oklch(52% 0.01 260);
+      max-width: 520px; margin-bottom: 40px;
+      text-wrap: pretty;
+    }
+    .hero-subtitle code {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.88em;
+      color: oklch(72% 0.14 155);
+    }
+    .cta-row {
+      display: flex; gap: 16px; align-items: center;
+      justify-content: center; flex-wrap: wrap;
+    }
+    .cta-install {
+      display: flex; align-items: center; gap: 12px;
+      background: oklch(13% 0.01 260);
+      border: 1px solid oklch(28% 0.01 260);
+      border-radius: 6px; padding: 13px 22px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: clamp(13px, 2vw, 15px);
+      color: var(--accent, oklch(82% 0.12 155));
+      cursor: pointer; transition: border-color 0.2s;
+      user-select: all;
+    }
+    .cta-install:hover { border-color: var(--accent, oklch(60% 0.14 155)); }
+    .cta-prefix { color: oklch(40% 0.01 260); }
+    .cta-copy-hint { opacity: 0.4; font-size: 11px; margin-left: 4px; }
+    .cta-gh {
+      display: flex; align-items: center; gap: 8px;
+      font-size: clamp(13px, 2vw, 15px); color: oklch(45% 0.01 260);
+      text-decoration: none; transition: color 0.15s;
+    }
+    .cta-gh:hover { color: oklch(72% 0.01 80); }
+
+    /* ── Demo GIF ── */
+    .demo-wrap {
+      padding: 0 clamp(24px, 5vw, 80px);
+    }
+    .demo-frame {
+      background: oklch(6.5% 0.01 260);
+      border: 1px solid oklch(20% 0.01 260);
+      border-radius: 10px; overflow: hidden;
+      max-width: 820px; margin: 0 auto;
+    }
+
+    .demo-gif {
+      display: block; width: 100%; height: auto;
+    }
+
+    /* ── Features ── */
+    .features {
+      margin-top: clamp(48px, 8vw, 80px);
+      border-top: 1px solid oklch(16% 0.01 260);
+    }
+    .features-header {
+      padding: clamp(36px, 5vw, 52px) clamp(24px, 5vw, 80px) clamp(20px, 3vw, 28px);
+      text-align: center;
+    }
+    .features-title {
+      font-family: 'DM Sans', sans-serif;
+      font-size: clamp(22px, 3vw, 32px); font-weight: 300;
+      color: oklch(88% 0.01 80); letter-spacing: -0.02em;
+      white-space: nowrap;
+    }
+    .features-rule {
+      flex: 1; height: 1px;
+      background: oklch(18% 0.01 260);
+      margin-bottom: 4px;
+    }
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1px;
+      background: oklch(16% 0.01 260);
+      border-top: 1px solid oklch(16% 0.01 260);
+      border-bottom: 1px solid oklch(16% 0.01 260);
+    }
+    @media (max-width: 900px) {
+      .features-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 480px) {
+      .features-grid { grid-template-columns: 1fr; }
+    }
+    .feat {
+      background: oklch(9% 0.01 260);
+      padding: clamp(22px, 3vw, 30px) clamp(20px, 3vw, 32px);
+      transition: background 0.15s;
+    }
+    .feat:hover { background: oklch(11% 0.01 260); }
+    .feat-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px; color: oklch(80% 0.16 155);
+      letter-spacing: 0.06em; text-transform: uppercase;
+      margin-bottom: 8px;
+      font-weight: 600;
+    }
+    .feat-text {
+      font-size: 14px; color: oklch(48% 0.01 260); line-height: 1.55;
+      text-wrap: pretty;
+    }
+
+    /* ── Groups ── */
+    .groups-section {
+      border-top: 1px solid oklch(16% 0.01 260);
+      padding: clamp(48px, 7vw, 80px) clamp(24px, 5vw, 80px) clamp(32px, 4vw, 48px);
+      display: flex; flex-direction: column; align-items: center;
+    }
+    .groups-header {
+      width: 100%; max-width: 820px;
+      margin-bottom: 28px;
+      text-align: center;
+    }
+    .groups-title {
+      font-family: 'DM Sans', sans-serif;
+      font-size: clamp(22px, 3vw, 32px); font-weight: 300;
+      color: oklch(88% 0.01 80); letter-spacing: -0.02em;
+      margin-bottom: 8px;
+    }
+    .groups-sub {
+      font-size: 17px; font-weight: 300; color: oklch(52% 0.01 260); line-height: 1.7;
+    }
+    .groups-terminal {
+      width: 100%; max-width: 820px;
+      background: oklch(6.5% 0.01 260);
+      border: 1px solid oklch(20% 0.01 260);
+      border-radius: 10px; overflow: hidden;
+    }
+    .t-dot { width: 12px; height: 12px; border-radius: 50%; flex-shrink: 0; }
+    .t-dot-r { background: #ff5f56; }
+    .t-dot-y { background: #ffbd2e; }
+    .t-dot-g { background: #27c93f; }
+
+    .groups-term-header {
+      display: flex; align-items: center; gap: 7px;
+      padding: 13px 18px;
+      background: oklch(11% 0.01 260);
+      border-bottom: 1px solid oklch(16% 0.01 260);
+    }
+    .groups-term-title {
+      font-family: 'JetBrains Mono', monospace; font-size: 11px;
+      color: oklch(35% 0.01 260); margin: 0 auto;
+    }
+    .groups-term-body {
+      padding: clamp(16px, 3vw, 24px) clamp(20px, 4vw, 32px);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: clamp(11px, 1.5vw, 13px);
+      line-height: 1.9; overflow-x: auto;
+      white-space: pre;
+    }
+    .groups-term-body .g-spacer { height: 10px; }
+    .groups-term-body > div { line-height: 1.6; }
+    .groups-term-body > div:first-child { line-height: 1.9; }
+    .g-prompt  { color: oklch(72% 0.14 155); }
+    .g-cmd     { color: oklch(88% 0.01 80); }
+    .g-group   { color: oklch(75% 0.1 220); font-weight: 600; }
+    .g-header  { color: oklch(88% 0.01 80); font-weight: 600; }
+    .g-closed  { color: oklch(60% 0.18 25); }
+    .g-open    { color: oklch(68% 0.14 155); }
+    .g-name    { color: oklch(88% 0.01 80); }
+    .g-arrow   { color: oklch(88% 0.01 80); }
+    .g-via     { color: oklch(88% 0.01 80); }
+    .g-spacer  { height: 6px; }
+    .g-new-badge {
+      display: inline-block;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      background: oklch(16% 0.02 155); color: oklch(72% 0.14 155);
+      border: 1px solid oklch(28% 0.08 155);
+      padding: 2px 8px; border-radius: 100px;
+      letter-spacing: 0.04em; margin-left: 10px;
+      vertical-align: middle; position: relative; top: -1px;
+    }
+
+    /* ── Config ── */
+    .config-section {
+      border-top: 1px solid oklch(16% 0.01 260);
+      padding: clamp(48px, 7vw, 80px) clamp(24px, 5vw, 80px) clamp(32px, 4vw, 48px);
+      display: flex; flex-direction: column; align-items: center;
+    }
+    .config-header {
+      width: 100%; max-width: 820px;
+      margin-bottom: 28px;
+      text-align: center;
+    }
+    .config-title {
+      font-family: 'DM Sans', sans-serif;
+      font-size: clamp(22px, 3vw, 32px); font-weight: 300;
+      color: oklch(88% 0.01 80); letter-spacing: -0.02em;
+      margin-bottom: 8px;
+    }
+    .config-sub {
+      font-size: 17px; font-weight: 300; color: oklch(52% 0.01 260); line-height: 1.7;
+    }
+    .config-block {
+      width: 100%; max-width: 820px;
+      background: oklch(6.5% 0.01 260);
+      border: 1px solid oklch(20% 0.01 260);
+      border-radius: 10px; overflow: hidden;
+    }
+    .config-bar {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 12px 20px;
+      background: oklch(11% 0.01 260);
+      border-bottom: 1px solid oklch(16% 0.01 260);
+    }
+    .config-filename {
+      font-family: 'JetBrains Mono', monospace; font-size: 11px;
+      color: oklch(38% 0.01 260);
+    }
+    .config-code {
+      padding: clamp(20px, 3vw, 28px) clamp(20px, 3vw, 32px);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: clamp(12px, 1.5vw, 13px);
+      line-height: 1.6;
+      overflow-x: auto;
+    }
+    .c-comment { color: oklch(38% 0.01 260); }
+    .c-key     { color: oklch(75% 0.01 80); }
+    .c-val     { color: oklch(70% 0.12 55); }
+    .c-str     { color: oklch(72% 0.14 155); }
+    .c-section { color: oklch(75% 0.1 220); }
+    .c-blank   { height: 10px; }
+
+    /* ── Get started ── */
+    .getstarted {
+      padding: clamp(40px, 6vw, 64px) clamp(24px, 5vw, 80px) clamp(40px, 6vw, 64px);
+      text-align: center;
+      display: flex; flex-direction: column; align-items: center;
+      border-top: 1px solid oklch(16% 0.01 260);
+    }
+    .getstarted-title {
+      font-family: 'DM Sans', sans-serif;
+      font-size: clamp(22px, 3vw, 32px); font-weight: 300;
+      color: oklch(88% 0.01 80); letter-spacing: -0.02em;
+      margin-bottom: 12px;
+    }
+    .getstarted-sub a {
+      color: var(--accent, oklch(72% 0.14 155));
+      text-decoration: underline;
+      text-decoration-style: dotted;
+      text-underline-offset: 3px;
+    }
+      margin-bottom: 0; max-width: 480px; line-height: 1.7;
+      text-wrap: pretty;
+    }
+    .getstarted-row { display: flex; gap: 12px; align-items: center; justify-content: center; flex-wrap: wrap; }
+    .getstarted-install {
+      display: flex; align-items: center; gap: 12px;
+      background: oklch(13% 0.01 260);
+      border: 1px solid oklch(28% 0.01 260);
+      border-radius: 6px; padding: 13px 22px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 15px; color: var(--accent, oklch(82% 0.12 155));
+      cursor: pointer; transition: border-color 0.2s;
+      user-select: all;
+    }
+    .getstarted-install:hover { border-color: var(--accent, oklch(60% 0.14 155)); }
+    .getstarted-prefix { color: oklch(40% 0.01 260); }
+    .getstarted-gh {
+      display: flex; align-items: center; gap: 8px;
+      font-size: 14px; color: oklch(45% 0.01 260);
+      text-decoration: none; transition: color 0.15s;
+      padding: 13px 4px;
+    }
+    .getstarted-gh:hover { color: oklch(72% 0.01 80); }
+
+    /* ── Footer ── */
+    .footer {
+      padding: clamp(28px, 4vw, 36px) clamp(24px, 5vw, 80px);
+      display: flex; align-items: center; justify-content: space-between;
+      flex-wrap: wrap; gap: 16px;
+      border-top: 1px solid oklch(14% 0.01 260);
+    }
+    .footer-logo {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 14px; font-weight: 600;
+      color: oklch(28% 0.01 260);
+      letter-spacing: -0.02em;
+    }
+    .footer-copy {
+      font-size: 13px; color: oklch(35% 0.01 260);
+    }
+    .footer-links { display: flex; gap: 24px; flex-wrap: wrap; }
+    .footer-links a {
+      font-size: 13px; color: oklch(35% 0.01 260);
+      text-decoration: none; transition: color 0.15s;
+    }
+    .footer-links a:hover { color: oklch(58% 0.01 260); }
+  </style>
+</head>
+<body>
+<script type="text/babel">
+
+
+
+
+
+
+
+
+
+
+
+
+
+// ═══════════════════════════════
+// TWEAKS PANEL (inlined)
+// ═══════════════════════════════
+
+// tweaks-panel.jsx
+// Reusable Tweaks shell + form-control helpers.
+//
+// Owns the host protocol (listens for __activate_edit_mode / __deactivate_edit_mode,
+// posts __edit_mode_available / __edit_mode_set_keys / __edit_mode_dismissed) so
+// individual prototypes don't re-roll it. Ships a consistent set of controls so you
+// don't hand-draw <input type="range">, segmented radios, steppers, etc.
+//
+// Usage (in an HTML file that loads React + Babel):
+//
+//   const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
+//     "primaryColor": "#D97757",
+//     "fontSize": 16,
+//     "density": "regular",
+//     "dark": false
+//   }/*EDITMODE-END*/;
+//
+//   function App() {
+//     const [t, setTweak] = useTweaks(TWEAK_DEFAULTS);
+//     return (
+//       <div style={{ fontSize: t.fontSize, color: t.primaryColor }}>
+//         Hello
+//         <TweaksPanel>
+//           <TweakSection label="Typography" />
+//           <TweakSlider label="Font size" value={t.fontSize} min={10} max={32} unit="px"
+//                        onChange={(v) => setTweak('fontSize', v)} />
+//           <TweakRadio  label="Density" value={t.density}
+//                        options={['compact', 'regular', 'comfy']}
+//                        onChange={(v) => setTweak('density', v)} />
+//           <TweakSection label="Theme" />
+//           <TweakColor  label="Primary" value={t.primaryColor}
+//                        onChange={(v) => setTweak('primaryColor', v)} />
+//           <TweakToggle label="Dark mode" value={t.dark}
+//                        onChange={(v) => setTweak('dark', v)} />
+//         </TweaksPanel>
+//       </div>
+//     );
+//   }
+//
+// ─────────────────────────────────────────────────────────────────────────────
+
+const __TWEAKS_STYLE = `
+  .twk-panel{position:fixed;right:16px;bottom:16px;z-index:2147483646;width:280px;
+    max-height:calc(100vh - 32px);display:flex;flex-direction:column;
+    background:rgba(250,249,247,.78);color:#29261b;
+    -webkit-backdrop-filter:blur(24px) saturate(160%);backdrop-filter:blur(24px) saturate(160%);
+    border:.5px solid rgba(255,255,255,.6);border-radius:14px;
+    box-shadow:0 1px 0 rgba(255,255,255,.5) inset,0 12px 40px rgba(0,0,0,.18);
+    font:11.5px/1.4 ui-sans-serif,system-ui,-apple-system,sans-serif;overflow:hidden}
+  .twk-hd{display:flex;align-items:center;justify-content:space-between;
+    padding:10px 8px 10px 14px;cursor:move;user-select:none}
+  .twk-hd b{font-size:12px;font-weight:600;letter-spacing:.01em}
+  .twk-x{appearance:none;border:0;background:transparent;color:rgba(41,38,27,.55);
+    width:22px;height:22px;border-radius:6px;cursor:default;font-size:13px;line-height:1}
+  .twk-x:hover{background:rgba(0,0,0,.06);color:#29261b}
+  .twk-body{padding:2px 14px 14px;display:flex;flex-direction:column;gap:10px;
+    overflow-y:auto;overflow-x:hidden;min-height:0;
+    scrollbar-width:thin;scrollbar-color:rgba(0,0,0,.15) transparent}
+  .twk-body::-webkit-scrollbar{width:8px}
+  .twk-body::-webkit-scrollbar-track{background:transparent;margin:2px}
+  .twk-body::-webkit-scrollbar-thumb{background:rgba(0,0,0,.15);border-radius:4px;
+    border:2px solid transparent;background-clip:content-box}
+  .twk-body::-webkit-scrollbar-thumb:hover{background:rgba(0,0,0,.25);
+    border:2px solid transparent;background-clip:content-box}
+  .twk-row{display:flex;flex-direction:column;gap:5px}
+  .twk-row-h{flex-direction:row;align-items:center;justify-content:space-between;gap:10px}
+  .twk-lbl{display:flex;justify-content:space-between;align-items:baseline;
+    color:rgba(41,38,27,.72)}
+  .twk-lbl>span:first-child{font-weight:500}
+  .twk-val{color:rgba(41,38,27,.5);font-variant-numeric:tabular-nums}
+
+  .twk-sect{font-size:10px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;
+    color:rgba(41,38,27,.45);padding:10px 0 0}
+  .twk-sect:first-child{padding-top:0}
+
+  .twk-field{appearance:none;width:100%;height:26px;padding:0 8px;
+    border:.5px solid rgba(0,0,0,.1);border-radius:7px;
+    background:rgba(255,255,255,.6);color:inherit;font:inherit;outline:none}
+  .twk-field:focus{border-color:rgba(0,0,0,.25);background:rgba(255,255,255,.85)}
+  select.twk-field{padding-right:22px;
+    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'><path fill='rgba(0,0,0,.5)' d='M0 0h10L5 6z'/></svg>");
+    background-repeat:no-repeat;background-position:right 8px center}
+
+  .twk-slider{appearance:none;-webkit-appearance:none;width:100%;height:4px;margin:6px 0;
+    border-radius:999px;background:rgba(0,0,0,.12);outline:none}
+  .twk-slider::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;
+    width:14px;height:14px;border-radius:50%;background:#fff;
+    border:.5px solid rgba(0,0,0,.12);box-shadow:0 1px 3px rgba(0,0,0,.2);cursor:default}
+  .twk-slider::-moz-range-thumb{width:14px;height:14px;border-radius:50%;
+    background:#fff;border:.5px solid rgba(0,0,0,.12);box-shadow:0 1px 3px rgba(0,0,0,.2);cursor:default}
+
+  .twk-seg{position:relative;display:flex;padding:2px;border-radius:8px;
+    background:rgba(0,0,0,.06);user-select:none}
+  .twk-seg-thumb{position:absolute;top:2px;bottom:2px;border-radius:6px;
+    background:rgba(255,255,255,.9);box-shadow:0 1px 2px rgba(0,0,0,.12);
+    transition:left .15s cubic-bezier(.3,.7,.4,1),width .15s}
+  .twk-seg.dragging .twk-seg-thumb{transition:none}
+  .twk-seg button{appearance:none;position:relative;z-index:1;flex:1;border:0;
+    background:transparent;color:inherit;font:inherit;font-weight:500;min-height:22px;
+    border-radius:6px;cursor:default;padding:4px 6px;line-height:1.2;
+    overflow-wrap:anywhere}
+
+  .twk-toggle{position:relative;width:32px;height:18px;border:0;border-radius:999px;
+    background:rgba(0,0,0,.15);transition:background .15s;cursor:default;padding:0}
+  .twk-toggle[data-on="1"]{background:#34c759}
+  .twk-toggle i{position:absolute;top:2px;left:2px;width:14px;height:14px;border-radius:50%;
+    background:#fff;box-shadow:0 1px 2px rgba(0,0,0,.25);transition:transform .15s}
+  .twk-toggle[data-on="1"] i{transform:translateX(14px)}
+
+  .twk-num{display:flex;align-items:center;height:26px;padding:0 0 0 8px;
+    border:.5px solid rgba(0,0,0,.1);border-radius:7px;background:rgba(255,255,255,.6)}
+  .twk-num-lbl{font-weight:500;color:rgba(41,38,27,.6);cursor:ew-resize;
+    user-select:none;padding-right:8px}
+  .twk-num input{flex:1;min-width:0;height:100%;border:0;background:transparent;
+    font:inherit;font-variant-numeric:tabular-nums;text-align:right;padding:0 8px 0 0;
+    outline:none;color:inherit;-moz-appearance:textfield}
+  .twk-num input::-webkit-inner-spin-button,.twk-num input::-webkit-outer-spin-button{
+    -webkit-appearance:none;margin:0}
+  .twk-num-unit{padding-right:8px;color:rgba(41,38,27,.45)}
+
+  .twk-btn{appearance:none;height:26px;padding:0 12px;border:0;border-radius:7px;
+    background:rgba(0,0,0,.78);color:#fff;font:inherit;font-weight:500;cursor:default}
+  .twk-btn:hover{background:rgba(0,0,0,.88)}
+  .twk-btn.secondary{background:rgba(0,0,0,.06);color:inherit}
+  .twk-btn.secondary:hover{background:rgba(0,0,0,.1)}
+
+  .twk-swatch{appearance:none;-webkit-appearance:none;width:56px;height:22px;
+    border:.5px solid rgba(0,0,0,.1);border-radius:6px;padding:0;cursor:default;
+    background:transparent;flex-shrink:0}
+  .twk-swatch::-webkit-color-swatch-wrapper{padding:0}
+  .twk-swatch::-webkit-color-swatch{border:0;border-radius:5.5px}
+  .twk-swatch::-moz-color-swatch{border:0;border-radius:5.5px}
+`;
+
+// ── useTweaks ───────────────────────────────────────────────────────────────
+// Single source of truth for tweak values. setTweak persists via the host
+// (__edit_mode_set_keys → host rewrites the EDITMODE block on disk).
+function useTweaks(defaults) {
+  const [values, setValues] = React.useState(defaults);
+  // Accepts either setTweak('key', value) or setTweak({ key: value, ... }) so a
+  // useState-style call doesn't write a "[object Object]" key into the persisted
+  // JSON block.
+  const setTweak = React.useCallback((keyOrEdits, val) => {
+    const edits = typeof keyOrEdits === 'object' && keyOrEdits !== null
+      ? keyOrEdits : { [keyOrEdits]: val };
+    setValues((prev) => ({ ...prev, ...edits }));
+    window.parent.postMessage({ type: '__edit_mode_set_keys', edits }, '*');
+  }, []);
+  return [values, setTweak];
+}
+
+// ── TweaksPanel ─────────────────────────────────────────────────────────────
+// Floating shell. Registers the protocol listener BEFORE announcing
+// availability — if the announce ran first, the host's activate could land
+// before our handler exists and the toolbar toggle would silently no-op.
+// The close button posts __edit_mode_dismissed so the host's toolbar toggle
+// flips off in lockstep; the host echoes __deactivate_edit_mode back which
+// is what actually hides the panel.
+function TweaksPanel({ title = 'Tweaks', children }) {
+  const [open, setOpen] = React.useState(false);
+  const dragRef = React.useRef(null);
+  const offsetRef = React.useRef({ x: 16, y: 16 });
+  const PAD = 16;
+
+  const clampToViewport = React.useCallback(() => {
+    const panel = dragRef.current;
+    if (!panel) return;
+    const w = panel.offsetWidth, h = panel.offsetHeight;
+    const maxRight = Math.max(PAD, window.innerWidth - w - PAD);
+    const maxBottom = Math.max(PAD, window.innerHeight - h - PAD);
+    offsetRef.current = {
+      x: Math.min(maxRight, Math.max(PAD, offsetRef.current.x)),
+      y: Math.min(maxBottom, Math.max(PAD, offsetRef.current.y)),
+    };
+    panel.style.right = offsetRef.current.x + 'px';
+    panel.style.bottom = offsetRef.current.y + 'px';
+  }, []);
+
+  React.useEffect(() => {
+    if (!open) return;
+    clampToViewport();
+    if (typeof ResizeObserver === 'undefined') {
+      window.addEventListener('resize', clampToViewport);
+      return () => window.removeEventListener('resize', clampToViewport);
+    }
+    const ro = new ResizeObserver(clampToViewport);
+    ro.observe(document.documentElement);
+    return () => ro.disconnect();
+  }, [open, clampToViewport]);
+
+  React.useEffect(() => {
+    const onMsg = (e) => {
+      const t = e?.data?.type;
+      if (t === '__activate_edit_mode') setOpen(true);
+      else if (t === '__deactivate_edit_mode') setOpen(false);
+    };
+    window.addEventListener('message', onMsg);
+    window.parent.postMessage({ type: '__edit_mode_available' }, '*');
+    return () => window.removeEventListener('message', onMsg);
+  }, []);
+
+  const dismiss = () => {
+    setOpen(false);
+    window.parent.postMessage({ type: '__edit_mode_dismissed' }, '*');
+  };
+
+  const onDragStart = (e) => {
+    const panel = dragRef.current;
+    if (!panel) return;
+    const r = panel.getBoundingClientRect();
+    const sx = e.clientX, sy = e.clientY;
+    const startRight = window.innerWidth - r.right;
+    const startBottom = window.innerHeight - r.bottom;
+    const move = (ev) => {
+      offsetRef.current = {
+        x: startRight - (ev.clientX - sx),
+        y: startBottom - (ev.clientY - sy),
+      };
+      clampToViewport();
+    };
+    const up = () => {
+      window.removeEventListener('mousemove', move);
+      window.removeEventListener('mouseup', up);
+    };
+    window.addEventListener('mousemove', move);
+    window.addEventListener('mouseup', up);
+  };
+
+  if (!open) return null;
+  return (
+    <>
+      <style>{__TWEAKS_STYLE}</style>
+      <div ref={dragRef} className="twk-panel" data-noncommentable=""
+           style={{ right: offsetRef.current.x, bottom: offsetRef.current.y }}>
+        <div className="twk-hd" onMouseDown={onDragStart}>
+          <b>{title}</b>
+          <button className="twk-x" aria-label="Close tweaks"
+                  onMouseDown={(e) => e.stopPropagation()}
+                  onClick={dismiss}>✕</button>
+        </div>
+        <div className="twk-body">{children}</div>
+      </div>
+    </>
+  );
+}
+
+// ── Layout helpers ──────────────────────────────────────────────────────────
+
+function TweakSection({ label, children }) {
+  return (
+    <>
+      <div className="twk-sect">{label}</div>
+      {children}
+    </>
+  );
+}
+
+function TweakRow({ label, value, children, inline = false }) {
+  return (
+    <div className={inline ? 'twk-row twk-row-h' : 'twk-row'}>
+      <div className="twk-lbl">
+        <span>{label}</span>
+        {value != null && <span className="twk-val">{value}</span>}
+      </div>
+      {children}
+    </div>
+  );
+}
+
+// ── Controls ────────────────────────────────────────────────────────────────
+
+function TweakSlider({ label, value, min = 0, max = 100, step = 1, unit = '', onChange }) {
+  return (
+    <TweakRow label={label} value={`${value}${unit}`}>
+      <input type="range" className="twk-slider" min={min} max={max} step={step}
+             value={value} onChange={(e) => onChange(Number(e.target.value))} />
+    </TweakRow>
+  );
+}
+
+function TweakToggle({ label, value, onChange }) {
+  return (
+    <div className="twk-row twk-row-h">
+      <div className="twk-lbl"><span>{label}</span></div>
+      <button type="button" className="twk-toggle" data-on={value ? '1' : '0'}
+              role="switch" aria-checked={!!value}
+              onClick={() => onChange(!value)}><i /></button>
+    </div>
+  );
+}
+
+function TweakRadio({ label, value, options, onChange }) {
+  const trackRef = React.useRef(null);
+  const [dragging, setDragging] = React.useState(false);
+  const opts = options.map((o) => (typeof o === 'object' ? o : { value: o, label: o }));
+  const idx = Math.max(0, opts.findIndex((o) => o.value === value));
+  const n = opts.length;
+
+  // The active value is read by pointer-move handlers attached for the lifetime
+  // of a drag — ref it so a stale closure doesn't fire onChange for every move.
+  const valueRef = React.useRef(value);
+  valueRef.current = value;
+
+  const segAt = (clientX) => {
+    const r = trackRef.current.getBoundingClientRect();
+    const inner = r.width - 4;
+    const i = Math.floor(((clientX - r.left - 2) / inner) * n);
+    return opts[Math.max(0, Math.min(n - 1, i))].value;
+  };
+
+  const onPointerDown = (e) => {
+    setDragging(true);
+    const v0 = segAt(e.clientX);
+    if (v0 !== valueRef.current) onChange(v0);
+    const move = (ev) => {
+      if (!trackRef.current) return;
+      const v = segAt(ev.clientX);
+      if (v !== valueRef.current) onChange(v);
+    };
+    const up = () => {
+      setDragging(false);
+      window.removeEventListener('pointermove', move);
+      window.removeEventListener('pointerup', up);
+    };
+    window.addEventListener('pointermove', move);
+    window.addEventListener('pointerup', up);
+  };
+
+  return (
+    <TweakRow label={label}>
+      <div ref={trackRef} role="radiogroup" onPointerDown={onPointerDown}
+           className={dragging ? 'twk-seg dragging' : 'twk-seg'}>
+        <div className="twk-seg-thumb"
+             style={{ left: `calc(2px + ${idx} * (100% - 4px) / ${n})`,
+                      width: `calc((100% - 4px) / ${n})` }} />
+        {opts.map((o) => (
+          <button key={o.value} type="button" role="radio" aria-checked={o.value === value}>
+            {o.label}
+          </button>
+        ))}
+      </div>
+    </TweakRow>
+  );
+}
+
+function TweakSelect({ label, value, options, onChange }) {
+  return (
+    <TweakRow label={label}>
+      <select className="twk-field" value={value} onChange={(e) => onChange(e.target.value)}>
+        {options.map((o) => {
+          const v = typeof o === 'object' ? o.value : o;
+          const l = typeof o === 'object' ? o.label : o;
+          return <option key={v} value={v}>{l}</option>;
+        })}
+      </select>
+    </TweakRow>
+  );
+}
+
+function TweakText({ label, value, placeholder, onChange }) {
+  return (
+    <TweakRow label={label}>
+      <input className="twk-field" type="text" value={value} placeholder={placeholder}
+             onChange={(e) => onChange(e.target.value)} />
+    </TweakRow>
+  );
+}
+
+function TweakNumber({ label, value, min, max, step = 1, unit = '', onChange }) {
+  const clamp = (n) => {
+    if (min != null && n < min) return min;
+    if (max != null && n > max) return max;
+    return n;
+  };
+  const startRef = React.useRef({ x: 0, val: 0 });
+  const onScrubStart = (e) => {
+    e.preventDefault();
+    startRef.current = { x: e.clientX, val: value };
+    const decimals = (String(step).split('.')[1] || '').length;
+    const move = (ev) => {
+      const dx = ev.clientX - startRef.current.x;
+      const raw = startRef.current.val + dx * step;
+      const snapped = Math.round(raw / step) * step;
+      onChange(clamp(Number(snapped.toFixed(decimals))));
+    };
+    const up = () => {
+      window.removeEventListener('pointermove', move);
+      window.removeEventListener('pointerup', up);
+    };
+    window.addEventListener('pointermove', move);
+    window.addEventListener('pointerup', up);
+  };
+  return (
+    <div className="twk-num">
+      <span className="twk-num-lbl" onPointerDown={onScrubStart}>{label}</span>
+      <input type="number" value={value} min={min} max={max} step={step}
+             onChange={(e) => onChange(clamp(Number(e.target.value)))} />
+      {unit && <span className="twk-num-unit">{unit}</span>}
+    </div>
+  );
+}
+
+function TweakColor({ label, value, onChange }) {
+  return (
+    <div className="twk-row twk-row-h">
+      <div className="twk-lbl"><span>{label}</span></div>
+      <input type="color" className="twk-swatch" value={value}
+             onChange={(e) => onChange(e.target.value)} />
+    </div>
+  );
+}
+
+function TweakButton({ label, onClick, secondary = false }) {
+  return (
+    <button type="button" className={secondary ? 'twk-btn secondary' : 'twk-btn'}
+            onClick={onClick}>{label}</button>
+  );
+}
+
+
+// ═══════════════════════════════
+// APP
+// ═══════════════════════════════
+
+const GitHubIcon = ({ size = 15 }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor">
+    <path d="M12 2C6.477 2 2 6.477 2 12c0 4.418 2.865 8.166 6.839 9.489.5.092.682-.217.682-.482 0-.237-.009-.868-.013-1.703-2.782.604-3.369-1.341-3.369-1.341-.454-1.154-1.11-1.461-1.11-1.461-.908-.62.069-.608.069-.608 1.003.071 1.531 1.03 1.531 1.03.892 1.529 2.341 1.087 2.91.832.092-.647.35-1.087.636-1.338-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.27.098-2.647 0 0 .84-.269 2.75 1.025A9.578 9.578 0 0112 6.836a9.59 9.59 0 012.504.337c1.909-1.294 2.747-1.025 2.747-1.025.546 1.377.202 2.394.1 2.647.64.699 1.028 1.592 1.028 2.683 0 3.842-2.339 4.687-4.566 4.935.359.309.678.919.678 1.852 0 1.336-.012 2.415-.012 2.743 0 .267.18.579.688.481C19.138 20.163 22 16.418 22 12c0-5.523-4.477-10-10-10z"/>
+  </svg>
+);
+
+const ArrowIcon = () => (
+  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M5 12h14M12 5l7 7-7 7"/>
+  </svg>
+);
+
+const CopyIcon = () => (
+  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <rect x="9" y="9" width="13" height="13" rx="2"/>
+    <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/>
+  </svg>
+);
+
+const landingDefaults = /*EDITMODE-BEGIN*/{
+  "accentColor": "oklch(72% 0.14 155)",
+  "heroTitleSize": 96,
+  "showTagline": true
+}/*EDITMODE-END*/;
+
+const FEATURES = [
+  { label: 'local / remote',  text: 'Local and remote port forwarding including dynamic SOCKS5 proxying.' },
+  { label: 'auto-reconnect',  text: 'Keep-alives and automatic reconnection on network drops.' },
+  { label: 'ssh config',      text: <span>Reads the existing <code style={{fontFamily:'JetBrains Mono, monospace', fontSize:'0.88em', color:'oklch(72% 0.14 155)'}}>~/.ssh/config</code>  and works with <code style={{fontFamily:'JetBrains Mono, monospace', fontSize:'0.88em', color:'oklch(72% 0.14 155)'}}>ssh-agent</code>.</span> },
+  { label: 'unix sockets',    text: 'Forward to and from Unix domain sockets in addition to TCP ports.' },
+  { label: 'toml config',     text: <span>Human-friendly configuration via TOML <code style={{fontFamily:'JetBrains Mono, monospace', fontSize:'0.88em', color:'oklch(72% 0.14 155)'}}></code>.</span> },
+  { label: 'shell completions', text: <span>Smart tab completions for <code style={{fontFamily:'JetBrains Mono, monospace', fontSize:'0.88em', color:'oklch(72% 0.14 155)'}}>bash</code>, <code style={{fontFamily:'JetBrains Mono, monospace', fontSize:'0.88em', color:'oklch(72% 0.14 155)'}}>zsh</code>, and <code style={{fontFamily:'JetBrains Mono, monospace', fontSize:'0.88em', color:'oklch(72% 0.14 155)'}}>fish</code>.</span> },
+];
+
+function App() {
+  const [t, setTweak] = useTweaks(landingDefaults);
+  const [version, setVersion] = React.useState('v0.12.0');
+  const [stars, setStars] = React.useState('1.1k');
+  React.useEffect(() => {
+    fetch('https://api.github.com/repos/alebeck/boring/releases/latest')
+      .then(r => r.json())
+      .then(d => { if (d.tag_name) setVersion(d.tag_name); })
+      .catch(() => {});
+    fetch('https://api.github.com/repos/alebeck/boring')
+      .then(r => r.json())
+      .then(d => {
+        if (d.stargazers_count) {
+          const n = d.stargazers_count;
+          setStars(n >= 1000 ? (n / 1000).toFixed(1).replace(/\.0$/, '') + 'k' : String(n));
+        }
+      })
+      .catch(() => {});
+  }, []);
+  const [copied, setCopied] = React.useState(false);
+  const accentStyle = { '--accent': t.accentColor };
+
+  const copy = () => {
+    navigator.clipboard?.writeText('brew install boring');
+    setCopied(true);
+    setTimeout(() => setCopied(false), 1800);
+  };
+
+  return (
+    <div style={accentStyle}>
+      {/* ── Nav ── */}
+      <nav className="nav">
+        <div className="nav-left">
+          <a href="#" style={{display:'flex', alignItems:'center'}}>
+            <img src="https://raw.githubusercontent.com/alebeck/boring/main/assets/gopher.png" alt="boring gopher" style={{width:32, height:32, objectFit:'contain'}} />
+          </a>
+          <a className="nav-logo" href="#">boring</a>
+          <a className="nav-version" href="https://github.com/alebeck/boring/releases" target="_blank" rel="noreferrer">{version}</a>
+        </div>
+        <div className="nav-links">
+          <a className="nav-gh" href="https://github.com/alebeck/boring" target="_blank" rel="noreferrer">
+            <GitHubIcon /><span>GitHub</span>
+          </a>
+        </div>
+      </nav>
+
+      {/* ── Hero ── */}
+      <section className="hero">
+        {t.showTagline && <p className="hero-tagline">Featured on Hacker News 🎉</p>}
+        <h1 className="hero-title" style={{fontSize: t.heroTitleSize}}>boring</h1>
+        <p className="hero-subtitle">
+          A simple command line SSH tunnel manager that just works. TOML config, automatic reconnection and keep-alives.
+        </p>
+        <div className="cta-row">
+          <div className="cta-install" onClick={copy} title="Click to copy">
+            <span className="cta-prefix">$</span>
+            <span>brew install boring</span>
+            <span className="cta-copy-hint">{copied ? '✓ copied' : <CopyIcon />}</span>
+          </div>
+          <a className="cta-gh" href="https://github.com/alebeck/boring" target="_blank" rel="noreferrer">
+            <GitHubIcon /><span style={{marginLeft:2}}>{stars} stars</span><ArrowIcon />
+          </a>
+        </div>
+      </section>
+
+      {/* ── Demo GIF ── */}
+      <div className="demo-wrap">
+        <div className="demo-frame">
+          <img
+            className="demo-gif"
+            src="https://raw.githubusercontent.com/alebeck/boring/main/assets/dark.gif"
+            alt="boring demo — listing, opening and closing SSH tunnels"
+          />
+        </div>
+      </div>
+
+      {/* ── Features ── */}
+      <section className="features">
+        <div className="features-header">
+          <span className="features-title">Features</span>
+        </div>
+        <div className="features-grid">
+          {FEATURES.map(f => (
+            <div className="feat" key={f.label}>
+              <div className="feat-label">{f.label}</div>
+              <div className="feat-text">{f.text}</div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* ── Config ── */}
+      <section className="config-section">
+        <div className="config-header">
+          <div className="config-title">Example config</div>
+          <div className="config-sub">Manually add your tunnels to <code style={{fontFamily:'JetBrains Mono, monospace', fontSize:'0.9em', color:'oklch(72% 0.14 155)'}}>~/.boring.toml</code> or simply run <code style={{fontFamily:'JetBrains Mono, monospace', fontSize:'0.9em', color:'oklch(72% 0.14 155)'}}>boring e<span style={{opacity:0.5}}>[dit]</span></code>.</div>
+        </div>
+        <div className="config-block">
+          <div className="config-code">
+            <div><span className="c-comment"># forward local :9000 to the remote — host resolved via ssh config</span></div>
+            <div><span className="c-section">[[tunnels]]</span></div>
+            <div><span className="c-key">name&nbsp;&nbsp;&nbsp;</span> <span className="c-val">=</span> <span className="c-str">"tensorboard"</span></div>
+            <div><span className="c-key">local&nbsp;&nbsp;</span> <span className="c-val">=</span> <span className="c-str">"9000"</span></div>
+            <div><span className="c-key">remote&nbsp;</span> <span className="c-val">=</span> <span className="c-str">"localhost:9000"</span></div>
+            <div><span className="c-key">host&nbsp;&nbsp;&nbsp;</span> <span className="c-val">=</span> <span className="c-str">"ml-cluster"</span></div>
+            <div className="c-blank"></div>
+            <div><span className="c-comment"># full example with custom user and identity</span></div>
+            <div><span className="c-section">[[tunnels]]</span></div>
+            <div><span className="c-key">name&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span className="c-val">=</span> <span className="c-str">"db-staging"</span></div>
+            <div><span className="c-key">local&nbsp;&nbsp;&nbsp;&nbsp;</span> <span className="c-val">=</span> <span className="c-str">"5001"</span></div>
+            <div><span className="c-key">remote&nbsp;&nbsp;&nbsp;</span> <span className="c-val">=</span> <span className="c-str">"localhost:5001"</span></div>
+            <div><span className="c-key">host&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span className="c-val">=</span> <span className="c-str">"staging.example.com"</span></div>
+            <div><span className="c-key">user&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span className="c-val">=</span> <span className="c-str">"staging"</span></div>
+            <div><span className="c-key">identity&nbsp;</span> <span className="c-val">=</span> <span className="c-str">"~/.ssh/id_staging"</span></div>
+          </div>
+        </div>
+      </section>
+
+      {/* ── Groups ── */}
+      <section className="groups-section">
+        <div className="groups-header">
+          <div className="groups-title">Groups <span className="g-new-badge">New in v0.13</span></div>
+          <div className="groups-sub">
+            Group tunnels for a better overview and grouped operations like <code style={{fontFamily:'JetBrains Mono, monospace', fontSize:'0.9em', color:'oklch(72% 0.14 155)'}}>open/close/list --group &lt;group&gt;</code>.
+          </div>
+        </div>
+        <div className="groups-terminal">
+          <div className="groups-term-header">
+            <div className="t-dot t-dot-r"></div>
+            <div className="t-dot t-dot-y"></div>
+            <div className="t-dot t-dot-g"></div>
+            <span className="groups-term-title">zsh</span>
+          </div>
+          <div className="groups-term-body">
+            <div><span className="g-prompt">~ $ </span><span className="g-cmd">boring list</span></div>
+            <div><span className="g-group">[prod]</span></div>
+            <div><span className="g-header">{"Status       Name           Local         Remote          Via"}</span></div>
+            <div><span className="g-open">{"01m56s       "}</span><span className="g-name">{"redis-prod  "}</span><span>{"   6379  "}</span><span className="g-arrow">{"   ->"}</span><span>{"   localhost:6379  "}</span><span className="g-via">prod-01</span></div>
+            <div className="g-spacer"></div>
+            <div><span className="g-group">[staging]</span></div>
+            <div><span className="g-header">{"Status       Name           Local         Remote          Via"}</span></div>
+            <div><span className="g-open">{"11h03m       "}</span><span className="g-name">{"redis-stage    "}</span><span>{"6379   "}</span><span className="g-arrow">{"  ->"}</span><span>{"   localhost:6380  "}</span><span className="g-via">staging</span></div>
+            <div><span className="g-closed">{"closed       "}</span><span className="g-name">{"grafana-stage  "}</span><span>{"3000   "}</span><span className="g-arrow">{"  ->"}</span><span>{"   localhost:3000  "}</span><span className="g-via">staging</span></div>
+            <div className="g-spacer"></div>
+            <div><span className="g-group">[proxy]</span></div>
+            <div><span className="g-header">{"Status       Name           Local         Remote          Via"}</span></div>
+            <div><span className="g-open">{"03m12s       "}</span><span className="g-name">{"local-proxy    "}</span><span>{"[SOCKS]"}</span><span className="g-arrow">{"  \u003c-"}</span><span>{"   /tmp/tmp-sock   "}</span><span className="g-via">bastion</span></div>
+          </div>
+        </div>
+        <p style={{
+          maxWidth: 820, width: '100%', marginTop: 20,
+          fontSize: 17, fontWeight: 300, color: 'oklch(52% 0.01 260)', lineHeight: 1.7,
+          fontFamily: "'DM Sans', sans-serif", textAlign: 'center'
+        }}>
+          Btw, the <code style={{fontFamily:'JetBrains Mono, monospace', fontSize:'0.9em', color:'oklch(72% 0.14 155)'}}>local-proxy</code> tunnel implements a reverse SOCKS5 server from a unix socket on <code style={{fontFamily:'JetBrains Mono, monospace', fontSize:'0.9em', color:'oklch(72% 0.14 155)'}}>bastion</code>  to the local host. 🚀</p>
+      </section>
+
+      {/* ── Get started ── */}
+      <section className="getstarted">
+        <h2 className="getstarted-title">Get started</h2>
+        <p className="getstarted-sub">
+          Install via <a href="https://github.com/alebeck/boring#homebrew" target="_blank" rel="noreferrer">Homebrew</a>, <a href="https://github.com/alebeck/boring/releases" target="_blank" rel="noreferrer">pre-built binary</a> or <a href="https://github.com/alebeck/boring#build-yourself" target="_blank" rel="noreferrer">build from source</a>. Check the <a href="https://github.com/alebeck/boring#readme" target="_blank" rel="noreferrer">README</a> for first steps and configuration options.
+        </p>
+      </section>
+
+      {/* ── Footer ── */}
+      <footer className="footer">
+        <div style={{display:'flex', alignItems:'center', gap:16}}>
+          <span className="footer-logo">boring</span>
+          <span className="footer-copy">© alebeck · Gopher © Renee French</span>
+        </div>
+        <div className="footer-links">
+          <a href="https://github.com/alebeck/boring" target="_blank" rel="noreferrer">GitHub</a>
+          <a href="https://github.com/alebeck/boring/releases" target="_blank" rel="noreferrer">Releases</a>
+          <a href="https://github.com/alebeck/boring/blob/main/LICENSE" target="_blank" rel="noreferrer">MIT License</a>
+        </div>
+      </footer>
+      <TweaksPanel>
+        <TweakSection label="Accent color" />
+        <TweakColor label="Color" value={t.accentColor} onChange={v => setTweak('accentColor', v)} />
+        <TweakSection label="Hero" />
+        <TweakSlider label="Title size" value={t.heroTitleSize} min={48} max={120} step={4} unit="px"
+                     onChange={v => setTweak('heroTitleSize', v)} />
+        <TweakToggle label="Show tagline" value={t.showTagline}
+                     onChange={v => setTweak('showTagline', v)} />
+      </TweaksPanel>
+    </div>
+  );
+}
+
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(<App />);
+
+
+
+
+
+
+
+
+
+
+
+
+
+</script>
+
+<div id="root"></div>
+
+<template id="__bundler_thumbnail">
+  <svg viewBox="0 0 80 56" xmlns="http://www.w3.org/2000/svg">
+    <rect width="80" height="56" fill="#0a0a0f"/>
+    <rect x="8" y="8" width="14" height="3" rx="1" fill="#e8e8e8" opacity="0.9"/>
+    <rect x="24" y="9" width="14" height="2" rx="1" fill="#2a4a3a"/>
+    <rect x="8" y="18" width="24" height="4" rx="1" fill="#6ee7b7" opacity="0.6"/>
+    <rect x="8" y="26" width="64" height="18" rx="2" fill="#0d0d14" stroke="#1e2a28" stroke-width="0.5"/>
+    <rect x="10" y="28" width="5" height="1.5" rx="0.5" fill="#ff5f56"/>
+    <rect x="17" y="28" width="5" height="1.5" rx="0.5" fill="#ffbd2e"/>
+    <rect x="24" y="28" width="5" height="1.5" rx="0.5" fill="#27c93f"/>
+    <rect x="10" y="32" width="30" height="1.2" rx="0.5" fill="#4a7a5a" opacity="0.8"/>
+    <rect x="10" y="35" width="22" height="1.2" rx="0.5" fill="#3a5a4a" opacity="0.6"/>
+    <rect x="10" y="38" width="26" height="1.2" rx="0.5" fill="#3a5a4a" opacity="0.6"/>
+  </svg>
+</template>
+</body>
+</html>
